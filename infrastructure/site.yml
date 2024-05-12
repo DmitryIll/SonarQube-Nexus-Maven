@@ -65,7 +65,7 @@
         state: present
 
     - name: Init template1 DB
-      command: /usr/pgsql-11/bin/postgresql-11-setup initdb
+      command: /usr/pgsql-11/bin/postgresql-{{ postgresql_version }}-setup initdb
       failed_when: false
 
     - name: Start pgsql service
