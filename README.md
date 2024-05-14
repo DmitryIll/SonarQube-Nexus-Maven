@@ -102,26 +102,148 @@ root@ansible:~/SonarQube-Nexus-Maven/example# sonar-scanner \
  *    classifier: distrib;
  *    type: tar.gz.
    
+Создал пустой файл:
+![alt text](image-13.png)
+
+И загрузил:
+
+![alt text](image-14.png)
+
 2. В него же загрузите такой же артефакт, но с version: 8_102.
+
+Еще раз загрузил только версию другую сделал.
+
 3. Проверьте, что все файлы загрузились успешно.
+
+![alt text](image-15.png)
+
 4. В ответе пришлите файл `maven-metadata.xml` для этого артефекта.
+
+```
+<metadata modelVersion="1.1.0">
+<groupId>netology</groupId>
+<artifactId>java</artifactId>
+<versioning>
+<latest>8_282</latest>
+<release>8_282</release>
+<versions>
+<version>8_102</version>
+<version>8_282</version>
+</versions>
+<lastUpdated>20240514060218</lastUpdated>
+</versioning>
+</metadata>
+```
+
+![alt text](image-16.png)
+
 
 ### Знакомство с Maven
 
 ### Подготовка к выполнению
 
 1. Скачайте дистрибутив с [maven](https://maven.apache.org/download.cgi).
+
+```
+wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.zip
+unzip apache-maven-3.9.6-bin.zip -d mvn/
+```
+
+Зайти в папку bin и:
+
+```
+export PATH=$(pwd):$PATH
+```
+
 2. Разархивируйте, сделайте так, чтобы binary был доступен через вызов в shell (или поменяйте переменную PATH, или любой другой, удобный вам способ).
+
 3. Удалите из `apache-maven-<version>/conf/settings.xml` упоминание о правиле, отвергающем HTTP- соединение — раздел mirrors —> id: my-repository-http-unblocker.
+
+Пока не понял смысл зачем это нужно и что именно нужно сделать?
+
+Нашел:
+
+![alt text](image-18.png)
+
+Не понял что нужно исправить, но, пока так иправил:
+
+```
+      <blocked>false</blocked>
+```
+
 4. Проверьте `mvn --version`.
+
+![alt text](image-17.png)
+
 5. Заберите директорию [mvn](./mvn) с pom.
+
+Забрать на какой сервер? Попробовал скопировать просто файл на сервер sonar-01.
+Верно ли?
+
 
 ### Основная часть
 
 1. Поменяйте в `pom.xml` блок с зависимостями под ваш артефакт из первого пункта задания для Nexus (java с версией 8_282).
+
+Поменял так:
+
+```
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <groupId>com.netology.app</groupId>
+  <artifactId>simple-app</artifactId>
+  <version>1.0-SNAPSHOT</version>
+   <repositories>
+    <repository>
+      <id>my-repo</id>
+      <name>maven-public</name>
+      <url>http://158.160.124.196:8081/repository/maven-public/</url>
+    </repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>netology</groupId>
+      <artifactId>java</artifactId>
+      <version>8_282</version>
+      <classifier>distrib</classifier>
+      <type>tar.gz</type>
+    </dependency>
+  </dependencies>
+</project>
+```
+Изменил только блок с зависимостями и подставил ip nexus.
+Но, нужно ли менять блок c репозиторием?? на что?
+
+```
+  <groupId>com.netology.app</groupId>
+  <artifactId>simple-app</artifactId>
+  <version>1.0-SNAPSHOT</version>
+   <repositories>
+    <repository>
+      <id>my-repo</id>
+      <name>maven-public</name>
+```
+
+
 2. Запустите команду `mvn package` в директории с `pom.xml`, ожидайте успешного окончания.
+
+![alt text](image-20.png)
+
+![alt text](image-19.png)
+
+Что тут пошло не так? 
+
 3. Проверьте директорию `~/.m2/repository/`, найдите ваш артефакт.
+![alt text](image-21.png)
+
+
 4. В ответе пришлите исправленный файл `pom.xml`.
+
+см. выше и в репозитории git-hub.
+
+Но, пока не очень понял про суть с maven и его файлами что к чему...
 
 ---
 
