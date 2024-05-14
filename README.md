@@ -45,12 +45,49 @@
 ![alt text](image-4.png)
 
 2. Скачайте пакет sonar-scanner, который вам предлагает скачать SonarQube.
+
+Скачал:
+
 3. Сделайте так, чтобы binary был доступен через вызов в shell (или поменяйте переменную PATH, или любой другой, удобный вам способ).
+
+![alt text](image-5.png)
+
 4. Проверьте `sonar-scanner --version`.
+
+![alt text](image-6.png)
+
 5. Запустите анализатор против кода из директории [example](./example) с дополнительным ключом `-Dsonar.coverage.exclusions=fail.py`.
+
+```
+root@ansible:~/SonarQube-Nexus-Maven/example# sonar-scanner \
+  -Dsonar.projectKey=myproject \
+  -Dsonar.sources=. \
+  -Dsonar.host.url=http://158.160.53.118:9000 \
+  -Dsonar.login=1daec88195a9ab002bab5bae27da3fee0924d87f \
+> -Dsonar.coverage.exclusions=fail.py
+```
+
+![alt text](image-7.png)
+
+
+
 6. Посмотрите результат в интерфейсе.
+
+![alt text](image-8.png)
+
+![alt text](image-9.png)
+
 7. Исправьте ошибки, которые он выявил, включая warnings.
+
+![alt text](image-10.png)
+
+
 8. Запустите анализатор повторно — проверьте, что QG пройдены успешно.
+
+![alt text](image-11.png)
+
+![alt text](image-12.png)
+
 9. Сделайте скриншот успешного прохождения анализа, приложите к решению ДЗ.
 
 ## Знакомство с Nexus
