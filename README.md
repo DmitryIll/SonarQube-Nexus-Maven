@@ -140,6 +140,9 @@ root@ansible:~/SonarQube-Nexus-Maven/example# sonar-scanner \
 
 ### Знакомство с Maven
 
+
+# 24/05/16 корректировки 
+
 ### Подготовка к выполнению
 
 1. Скачайте дистрибутив с [maven](https://maven.apache.org/download.cgi).
@@ -159,17 +162,13 @@ export PATH=$(pwd):$PATH
 
 3. Удалите из `apache-maven-<version>/conf/settings.xml` упоминание о правиле, отвергающем HTTP- соединение — раздел mirrors —> id: my-repository-http-unblocker.
 
-Пока не понял смысл зачем это нужно и что именно нужно сделать?
 
 Нашел:
 
 ![alt text](image-18.png)
 
-Не понял что нужно исправить, но, пока так иправил:
+Удалил просто все строчки конфига где был прописан mirror.
 
-```
-      <blocked>false</blocked>
-```
 
 4. Проверьте `mvn --version`.
 
@@ -177,9 +176,8 @@ export PATH=$(pwd):$PATH
 
 5. Заберите директорию [mvn](./mvn) с pom.
 
-Забрать на какой сервер? Попробовал скопировать просто файл на сервер sonar-01.
-Верно ли?
-
+В pom файле указал IP сервера nexus.
+подтянул из гита весь код на сервер sonar-01 .
 
 ### Основная часть
 
@@ -192,14 +190,14 @@ export PATH=$(pwd):$PATH
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
  
-  <groupId>com.netology.app</groupId>
+  <groupId>netology</groupId>
   <artifactId>simple-app</artifactId>
   <version>1.0-SNAPSHOT</version>
    <repositories>
     <repository>
       <id>my-repo</id>
       <name>maven-public</name>
-      <url>http://158.160.124.196:8081/repository/maven-public/</url>
+      <url>http://158.160.108.198:8081/repository/maven-public/</url>
     </repository>
   </repositories>
   <dependencies>
@@ -213,79 +211,27 @@ export PATH=$(pwd):$PATH
   </dependencies>
 </project>
 ```
-Изменил только блок с зависимостями и подставил ip nexus.
-Но, нужно ли менять блок c репозиторием?? на что?
-
-```
-  <groupId>com.netology.app</groupId>
-  <artifactId>simple-app</artifactId>
-  <version>1.0-SNAPSHOT</version>
-   <repositories>
-    <repository>
-      <id>my-repo</id>
-      <name>maven-public</name>
-```
+Изменил групп и блок с зависимостями - подставил ip nexus.
 
 
 2. Запустите команду `mvn package` в директории с `pom.xml`, ожидайте успешного окончания.
 
-![alt text](image-20.png)
+![alt text](image-24.png)
 
-![alt text](image-19.png)
+![alt text](image-25.png)
 
-# 24/05/14 19:49
-
-Попытка исправить:
-
-Попробовал скорректировать:
-
-![alt text](image-23.png)
-
-```
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-
-  <groupId>netology</groupId>
-  <artifactId>simple-app</artifactId>
-  <version>1.0-SNAPSHOT</version>
-   <repositories>
-    <repository>
-      <id>my-repo</id>
-      <name>maven-public</name>
-      <url>http://158.160.124.196:8081/repository/maven-public/</url>
-    </repository>
-  </repositories>
-  <dependencies>
-    <dependency>
-      <groupId>netology</groupId>
-      <artifactId>java</artifactId>
-      <version>8_282</version>
-      <classifier>distrib</classifier>
-      <type>tar.gz</type>
-    </dependency>
-  </dependencies>
-
-```
-
-Выполнил команду: опять ошибка. Почему?
-
-![alt text](image-22.png)
-
-
-
----
-далее пока без правок:
+Зависимость успешно подтянулась, хоть она и пустая.
 
 3. Проверьте директорию `~/.m2/repository/`, найдите ваш артефакт.
-![alt text](image-21.png)
 
+![alt text](image-26.png)
+
+- подтянулось.
 
 4. В ответе пришлите исправленный файл `pom.xml`.
 
 см. выше и в репозитории git-hub.
 
-Но, пока не очень понял про суть с maven и его файлами что к чему...
 
 ---
 
